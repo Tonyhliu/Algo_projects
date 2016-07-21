@@ -57,6 +57,16 @@ class DynamicArray
 
   # O(n): has to shift over all the elements.
   def unshift(val)
+    resize! if length == capacity
+
+    self.length += 1
+    (length - 2).downto(0).each do |idx|
+      self[idx + 1] = self[idx]
+    end
+
+    self[0] = val
+
+    nil
   end
 
   protected
@@ -70,7 +80,7 @@ class DynamicArray
   # O(n): has to copy over all the elements to the new store.
   def resize!
     new_cap = capacity * 2
-    new_store = StaticArray(new_cap)
+    new_store = StaticArray.new(new_cap)
     length.times do |i| # if length = 3, i from 0-2
       new_store[i] = self[i]
     end
