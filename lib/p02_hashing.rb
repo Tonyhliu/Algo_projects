@@ -4,18 +4,24 @@ end
 
 class Array
   def hash
+    self.each_with_index.inject(0) do |intermediate, (el, idx)|
+      (el.hash + idx.hash) ^ intermediate
+    end
   end
 end
 
 class String
   def hash
+    hashed = self.chars.map do |letter|
+      letter.ord
+    end
+    hashed.hash
   end
 end
 
 class Hash
-  # This returns 0 because rspec will break if it returns nil
-  # Make sure to implement an actual Hash#hash method
   def hash
-    0
+    hash_result = self.to_a.sort_by(&:hash)
+    hash_result.hash
   end
 end
