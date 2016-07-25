@@ -41,12 +41,10 @@ class HashSet
     @store = Array.new(num_buckets * 2) { Array.new }
     @count = 0 # reset count
 
-    # old.each do |bucket|
-    #   bucket.each do |num|
-    #     @store.insert(num)
-    #   end
-    # end
-
-    old.flatten.each { |key| self.insert(key) }
+    old.each do |bucket|
+      bucket.each do |num|
+        self.insert(num)
+      end
+    end
   end
 end
