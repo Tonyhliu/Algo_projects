@@ -28,31 +28,31 @@ class BinarySearchTree
   end
 
   def inorder
-    BinarySearchTree.inorder!(@root)
+    BinarySearchTree.inorder!(@root_node)
   end
 
   def postorder
-
+    BinarySearchTree.postorder!(@root_node)
   end
 
   def preorder
-
+    BinarySearchTree.preorder!(@root_node)
   end
 
   def height
-
+    BinarySearchTree.height!(@root_node)
   end
 
   def min
-
+    BinarySearchTree.min(@root_node)
   end
 
   def max
-
+    BinarySearchTree.max(@root_node)
   end
 
   def delete(value)
-
+    @root_node = BinarySearchTree.delete!(@root_node, value)
   end
 
   def self.insert!(node, value)
@@ -75,32 +75,62 @@ class BinarySearchTree
     if value < node.value
       return BinarySearchTree.find!(node.left, value)
     end
-    
+
     BinarySearchTree.find!(node.right, value)
   end
 
   def self.preorder!(node)
+    # BC
+    return [] unless node
 
+    arr = [node.value]
+    arr += BinarySearchTree.preorder!(node.left) if node.left
+    arr += BinarySearchTree.preorder!(node.right) if node.right
+
+    arr
   end
 
   def self.inorder!(node)
+    return [] unless node
 
+    arr = []
+    arr += BinarySearchTree.inorder!(node.left) if node.left
+    # Left side all smaller than node
+    arr << node.value
+    arr += BinarySearchTree.inorder!(node.right) if node.right
+
+    arr
   end
 
   def self.postorder!(node)
+    return [] unless node
 
+    arr = []
+    arr += BinarySearchTree.inorder!(node.left) if node.left
+    arr += BinarySearchTree.inorder!(node.right) if node.right
+    arr << node.value
+
+    arr
   end
 
   def self.height!(node)
+    return -1 unless node
 
+    1 + [BinarySearchTree.height!(node.left), BinarySearchTree.height!(node.right)].max
   end
 
   def self.max(node)
+    return nil unless node
+    return node unless node.right
 
+    BinarySearchTree.max(node.right)
   end
 
   def self.min(node)
+    return nil unless node
+    return node unless node.left
 
+    BinarySearchTree.min(node.left)
   end
 
   def self.delete_min!(node)
