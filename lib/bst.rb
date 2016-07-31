@@ -106,8 +106,8 @@ class BinarySearchTree
     return [] unless node
 
     arr = []
-    arr += BinarySearchTree.inorder!(node.left) if node.left
-    arr += BinarySearchTree.inorder!(node.right) if node.right
+    arr += BinarySearchTree.postorder!(node.left) if node.left
+    arr += BinarySearchTree.postorder!(node.right) if node.right
     arr << node.value
 
     arr
@@ -134,10 +134,29 @@ class BinarySearchTree
   end
 
   def self.delete_min!(node)
+    return nil unless node
+    return node.right unless node.left
 
+    node.left = BinarySearchTree.delete_min!(node.left)
+    node
   end
 
   def self.delete!(node, value)
+    return nil unless node
 
+    if value < node.value
+      node.left = BinarySearchTree.delete!(node.left, value)
+    elsif value > node.value
+      node.right = BinarySearchTree.delete!(node.right, value)
+    else
+      return node.left unless node.right
+      return node.right unless node.left
+      target_node = node
+      node = target_node.right.min
+      node.right = BinarySearchTree.delete_min!(target_node.right)
+      node.left = target_node.left
+    end
+
+    node
   end
 end
